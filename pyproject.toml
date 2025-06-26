@@ -1,9 +1,28 @@
 [project]
 name = "nova-oar-mcp"
 version = "0.1.0"
-description = "Add your description here"
+description = "MCP server for managing cluster jobs on NOVA's university cluster using OAR"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "mcp[cli]>=1.10.0",
 ]
+authors = [
+    {name = "diogo464", email = "noreply@d464.sh"},
+]
+license = {text = "MIT"}
+keywords = ["mcp", "cluster", "oar", "hpc", "job-management"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+]
+
+[project.scripts]
+nova-oar-mcp = "nova_oar_mcp:main"
+
+[project.urls]
+Homepage = "https://git.d464.sh/diogo464/nova-oar-mcp"
+Repository = "https://git.d464.sh/diogo464/nova-oar-mcp"

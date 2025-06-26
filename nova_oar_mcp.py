@@ -284,5 +284,10 @@ Available OAR Commands:
 """
 
 
-if __name__ == "__main__":
+def main():
+    """Entry point for the nova-oar-mcp command"""
     mcp.run()
+
+
+if __name__ == "__main__":
+    main()

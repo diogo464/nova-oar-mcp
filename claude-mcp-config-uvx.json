@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "nova-oar-cluster": {
+      "command": "uvx",
+      "args": ["--from", "git+https://git.d464.sh/diogo464/nova-oar-mcp", "nova-oar-mcp"],
+      "env": {
+        "CLUSTER_HOSTNAME": "cluster"
+      }
+    }
+  }
+}
