@@ -143,7 +143,7 @@ async def create_job(
     command: str = "sleep 365d",
     name: Optional[str] = None,
     best_effort: bool = False
-) -> str:
+) -> Dict[str, Any]:
     """
     Create a new job on the cluster
     
@@ -210,13 +210,52 @@ async def create_job(
         # Extract job ID from output
         job_id_match = re.search(r'OAR_JOB_ID=(\d+)', output)
         if job_id_match:
-            job_id = job_id_match.group(1)
-            return f"Job created successfully with ID: {job_id}\nOutput: {output}"
+            job_id = int(job_id_match.group(1))
+            
+            # Get detailed job information
+            try:
+                job_details = await get_job_status(job_id)
+                if "error" not in job_details:
+                    return {
+                        "status": "success",
+                        "message": f"Job created successfully with ID: {job_id}",
+                        "job_id": job_id,
+                        "submission_output": output,
+                        "job_details": job_details.get(str(job_id), job_details)
+                    }
+                else:
+                    # Fallback if we can't get details
+                    return {
+                        "status": "success",
+                        "message": f"Job created successfully with ID: {job_id}",
+                        "job_id": job_id,
+                        "submission_output": output,
+                        "job_details": None,
+                        "details_error": job_details.get("error")
+                    }
+            except Exception as e:
+                # Fallback if get_job_status fails
+                return {
+                    "status": "success",
+                    "message": f"Job created successfully with ID: {job_id}",
+                    "job_id": job_id,
+                    "submission_output": output,
+                    "job_details": None,
+                    "details_error": str(e)
+                }
         else:
-            return f"Job submission completed: {output}"
+            return {
+                "status": "error",
+                "message": "Job submission failed - no job ID returned",
+                "submission_output": output
+            }
             
     except ValueError as e:
-        return f"Failed to create job: {str(e)}"
+        return {
+            "status": "error",
+            "message": f"Failed to create job: {str(e)}",
+            "submission_output": None
+        }
 
 
 @mcp.tool()
