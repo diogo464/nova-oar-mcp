@@ -168,10 +168,10 @@ async def create_job(
                 return f"Invalid clusters: {invalid_clusters}. Available: {available_clusters}"
             
             if len(clusters) == 1:
-                cluster_part = f"{{cluster='{clusters[0]}'}}"
+                cluster_part = f"{{cluster in ('{clusters[0]}')}}"
             else:
-                cluster_constraint = " OR ".join([f"cluster='{c}'" for c in clusters])
-                cluster_part = f"{{({cluster_constraint})}}"
+                cluster_list = "', '".join(clusters)
+                cluster_part = f"{{cluster in ('{cluster_list}')}}"
             
             resource_string = f"{cluster_part}/nodes={nodes},walltime={walltime}"
         else:
